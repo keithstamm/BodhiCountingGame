@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bodhi's Counting Game! 🎈</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            color: #764ba2;
+            font-size: 1.3em;
+            margin-bottom: 30px;
+        }
+
+        .number-display {
+            font-size: 12em;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin: 30px 0;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.2);
+            animation: pulse 1s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .balloons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            min-height: 200px;
+        }
+
+        .balloon {
+            width: 60px;
+            height: 75px;
+            background: linear-gradient(145deg, #ff6b6b, #ee5a52);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .balloon:nth-child(2n) {
+            background: linear-gradient(145deg, #4ecdc4, #44a8a0);
+            animation-delay: 0.5s;
+        }
+
+        .balloon:nth-child(3n) {
+            background: linear-gradient(145deg, #ffd93d, #f5c800);
+            animation-delay: 1s;
+        }
+
+        .balloon:nth-child(4n) {
+            background: linear-gradient(145deg, #95e1d3, #76c7b7);
+            animation-delay: 1.5s;
+        }
+
+        .balloon:nth-child(5n) {
+            background: linear-gradient(145deg, #ff8787, #ff6b6b);
+            animation-delay: 2s;
+        }
+
+        .balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            width: 2px;
+            height: 20px;
+            background: #666;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(-2deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        button {
+            font-size: 1.8em;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            font-family: 'Comic Sans MS', sans-serif;
+        }
+
+        .next-btn {
+            background: linear-gradient(145deg, #51cf66, #37b24d);
+            color: white;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .next-btn:active {
+            transform: translateY(0);
+        }
+
+        .reset-btn {
+            background: linear-gradient(145deg, #ff8787, #ff6b6b);
+            color: white;
+            font-size: 1.3em;
+            padding: 15px 30px;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .celebration {
+            display: none;
+            font-size: 2em;
+            margin: 20px 0;
+            color: #667eea;
+        }
+
+        .celebration.show {
+            display: block;
+            animation: bounce 1s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.2) rotate(-5deg); }
+            75% { transform: scale(1.2) rotate(5deg); }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ff6b6b;
+            position: absolute;
+            animation: confetti-fall 3s linear;
+        }
+
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .encouragement {
+            color: #764ba2;
+            font-size: 1.4em;
+            margin: 15px 0;
+            font-weight: bold;
+            min-height: 40px;
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2em; }
+            .number-display { font-size: 8em; }
+            .balloon { width: 45px; height: 60px; }
+            button { font-size: 1.5em; padding: 15px 30px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Bodhi's Counting Game! 🎈</h1>
+        <p class="subtitle">Let's count together, Bodhi!</p>
+        
+        <div class="number-display" id="numberDisplay">1</div>
+        
+        <div class="encouragement" id="encouragement">Great job, Bodhi! 🌟</div>
+        
+        <div class="balloons-container" id="balloonsContainer"></div>
+        
+        <div class="celebration" id="celebration">
+            🎉 Wow, Bodhi! You counted to 20! 🎉<br>
+            You're amazing! ⭐
+        </div>
+        
+        <div class="button-container">
+            <button class="next-btn" id="nextBtn" onclick="nextNumber()">
+                Next Number! ➡️
+            </button>
+        </div>
+        
+        <div class="button-container" style="margin-top: 15px;">
+            <button class="reset-btn" onclick="resetGame()">
+                Start Over 🔄
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentNumber = 1;
+        
+        const encouragements = [
+            "Great job, Bodhi! 🌟",
+            "You're doing awesome, Bodhi! ⭐",
+            "Wow, Bodhi! Keep going! 🎈",
+            "Super counting, Bodhi! 🎯",
+            "Bodhi, you're so smart! 🧠",
+            "Amazing work, Bodhi! 🌈",
+            "You're a star, Bodhi! ✨",
+            "Keep it up, Bodhi! 🚀",
+            "Fantastic, Bodhi! 🎪",
+            "Bodhi, you're the best! 💫"
+        ];
+
+        function updateDisplay() {
+            const display = document.getElementById('numberDisplay');
+            const container = document.getElementById('balloonsContainer');
+            const celebration = document.getElementById('celebration');
+            const encouragement = document.getElementById('encouragement');
+            
+            // Update number with animation
+            display.style.animation = 'none';
+            setTimeout(() => {
+                display.textContent = currentNumber;
+                display.style.animation = 'pulse 1s ease-in-out';
+            }, 10);
+
+            // Show random encouragement
+            if (currentNumber < 20) {
+                encouragement.textContent = encouragements[Math.floor(Math.random() * encouragements.length)];
+            } else {
+                encouragement.textContent = '';
+            }
+
+            // Speak the number
+            speakNumber(currentNumber);
+
+            // Clear and create balloons
+            container.innerHTML = '';
+            for (let i = 0; i < currentNumber; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                balloon.style.animationDelay = `${i * 0.1}s`;
+                container.appendChild(balloon);
+            }
+
+            // Show celebration at 20
+            if (currentNumber === 20) {
+                celebration.classList.add('show');
+                createConfetti();
+                speakCelebration();
+                setTimeout(() => {
+                    celebration.classList.remove('show');
+                }, 5000);
+            }
+        }
+
+        function nextNumber() {
+            if (currentNumber < 20) {
+                currentNumber++;
+                updateDisplay();
+            } else {
+                // Restart from 1
+                currentNumber = 1;
+                updateDisplay();
+            }
+        }
+
+        function resetGame() {
+            currentNumber = 1;
+            updateDisplay();
+        }
+
+        function speakNumber(num) {
+            // Use Web Speech API if available
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(num.toString());
+                utterance.rate = 0.8;
+                utterance.pitch = 1.2;
+                speechSynthesis.speak(utterance);
+            }
+        }
+
+        function speakCelebration() {
+            if ('speechSynthesis' in window) {
+                setTimeout(() => {
+                    const utterance = new SpeechSynthesisUtterance("Wow Bodhi! You counted to 20! You're amazing!");
+                    utterance.rate = 0.9;
+                    utterance.pitch = 1.3;
+                    speechSynthesis.speak(utterance);
+                }, 500);
+            }
+        }
+
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#ffd93d', '#95e1d3', '#ff8787'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 2 + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 30);
+            }
+        }
+
+        // Initialize on load
+        updateDisplay();
+
+        // Allow spacebar or Enter to advance
+        document.addEventListener('keydown', (e) => {
+            if (e.key === ' ' || e.key === 'Enter') {
+                e.preventDefault();
+                nextNumber();
+            }
+        });
+    </script>
+</body>
+</html>
